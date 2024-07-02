@@ -140,7 +140,7 @@ function changeConsoleHeaderAndFooter() {
     if (!(response && response.data)) {
       return;
     }
-    const accountMap = response.data.data;
+    const accountData = response.data.data;
     const labelSelector = () =>
       document.querySelector(
         "span[data-testid='awsc-nav-account-menu-button']"
@@ -191,7 +191,7 @@ function changeConsoleHeaderAndFooter() {
           return;
         }
 
-        const accountName = accountMap[accountId];
+        const accountName = accountData[accountId] ?? accountData;
         const text = `SSO: ${roleName} @ ${accountName} (${accountId})`;
         label.innerText = text;
 

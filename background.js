@@ -1,11 +1,18 @@
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   const key = "chrome-aws-sso-data";
+  const details = { "name": "aws-userInfo" }
   if (request.method == "getSSOData") {
     chrome.storage.local.get(key, function (data) {
       if (data[key]) {
         sendResponse({ data: JSON.parse(data[key]) });
       } else {
-        sendResponse({});
+        chrome.cookies.getAll(details, function (cookie) {
+          if (cookie.length != 0) {
+            sendResponse({ data: { data: JSON.parse(decodeURIComponent(cookie[0].value)).alias } })
+          } else {
+            sendResponse({});
+          }
+        });
       }
     });
   } else if (request.method == "saveSSOData") {
